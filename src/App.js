@@ -1,15 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './App.css';
 import Navbar from './Navbar';
-import MarkdownPreview from './MarkdownPreview';
+import MainContent from './MainContent';
 
 function App() {
+  const [currentTool, setCurrentTool] = useState('markdown');
+
   return (
     <div className="App">
-      <Navbar />
-      <main className="main-content">
-        <MarkdownPreview />
-      </main>
+      <Navbar currentTool={currentTool} onToolChange={setCurrentTool} />
+      <MainContent currentTool={currentTool} />
     </div>
   );
 }

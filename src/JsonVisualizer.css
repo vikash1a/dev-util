@@ -1,0 +1,292 @@
+.json-visualizer-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+}
+
+.json-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  padding: 20px;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.json-header h2 {
+  margin: 0;
+  color: #2c3e50;
+  font-size: 1.8rem;
+  font-weight: 600;
+}
+
+.json-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.action-btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 0.9rem;
+}
+
+.format-btn {
+  background: #3498db;
+  color: white;
+}
+
+.format-btn:hover:not(:disabled) {
+  background: #2980b9;
+  transform: translateY(-2px);
+}
+
+.format-btn:disabled {
+  background: #bdc3c7;
+  cursor: not-allowed;
+}
+
+.clear-btn {
+  background: #e74c3c;
+  color: white;
+}
+
+.clear-btn:hover {
+  background: #c0392b;
+  transform: translateY(-2px);
+}
+
+.copy-btn {
+  background: #27ae60;
+  color: white;
+}
+
+.copy-btn:hover:not(:disabled) {
+  background: #229954;
+  transform: translateY(-2px);
+}
+
+.copy-btn:disabled {
+  background: #bdc3c7;
+  cursor: not-allowed;
+}
+
+.json-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+  margin-bottom: 30px;
+}
+
+.input-section,
+.output-section {
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.input-section h3,
+.output-section h3 {
+  margin: 0;
+  padding: 20px;
+  background: #f8f9fa;
+  border-bottom: 1px solid #e9ecef;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #495057;
+}
+
+.input-container {
+  padding: 20px;
+}
+
+.json-input {
+  width: 100%;
+  height: 400px;
+  border: 2px solid #e9ecef;
+  border-radius: 6px;
+  padding: 15px;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-size: 14px;
+  line-height: 1.6;
+  resize: none;
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+
+.json-input:focus {
+  border-color: #3498db;
+}
+
+.json-input.error {
+  border-color: #e74c3c;
+  background: #fdf2f2;
+}
+
+.error-message {
+  margin-top: 10px;
+  padding: 10px;
+  background: #fdf2f2;
+  border: 1px solid #fecaca;
+  border-radius: 6px;
+  color: #dc2626;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.error-icon {
+  font-size: 1.1rem;
+}
+
+.output-container {
+  padding: 20px;
+  height: 400px;
+  overflow-y: auto;
+}
+
+.json-placeholder {
+  color: #6c757d;
+  font-style: italic;
+  text-align: center;
+  padding: 20px;
+}
+
+.json-display {
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-size: 14px;
+  line-height: 1.6;
+  white-space: pre-wrap;
+}
+
+/* JSON Syntax Highlighting */
+.json-string {
+  color: #22863a;
+  font-weight: 500;
+}
+
+.json-number {
+  color: #005cc5;
+  font-weight: 600;
+}
+
+.json-boolean {
+  font-weight: 600;
+}
+
+.json-boolean.true {
+  color: #28a745;
+}
+
+.json-boolean.false {
+  color: #dc3545;
+}
+
+.json-null {
+  color: #6f42c1;
+  font-weight: 600;
+}
+
+.json-key {
+  color: #d73a49;
+  font-weight: 600;
+}
+
+.json-colon {
+  color: #24292e;
+}
+
+.json-comma {
+  color: #24292e;
+}
+
+.json-bracket {
+  color: #24292e;
+  font-weight: 600;
+}
+
+.json-empty {
+  color: #6c757d;
+  font-style: italic;
+}
+
+.json-array-content,
+.json-object-content {
+  margin-left: 20px;
+}
+
+.json-array-item,
+.json-object-item {
+  margin: 2px 0;
+}
+
+.json-info {
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  display: flex;
+  gap: 30px;
+  justify-content: center;
+}
+
+.info-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+}
+
+.info-label {
+  font-size: 0.9rem;
+  color: #6c757d;
+  font-weight: 500;
+}
+
+.info-value {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .json-content {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  
+  .json-visualizer-container {
+    padding: 10px;
+  }
+  
+  .json-header {
+    flex-direction: column;
+    gap: 15px;
+    text-align: center;
+  }
+  
+  .json-actions {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  
+  .json-info {
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .json-input,
+  .output-container {
+    height: 300px;
+  }
+} 

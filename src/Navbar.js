@@ -1,11 +1,16 @@
 import React, { useState } from 'react';
 import './Navbar.css';
 
-const Navbar = () => {
+const Navbar = ({ currentTool, onToolChange }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
+  };
+
+  const handleToolClick = (tool) => {
+    onToolChange(tool);
+    setIsMenuOpen(false);
   };
 
   return (
@@ -16,18 +21,34 @@ const Navbar = () => {
         </div>
         
         <div className={`navbar-menu ${isMenuOpen ? 'active' : ''}`}>
-          <a href="#markdown" className="nav-link active">
+          <button 
+            onClick={() => handleToolClick('markdown')} 
+            className={`nav-link ${currentTool === 'markdown' ? 'active' : ''}`}
+          >
             <span className="nav-icon">📝</span>
             Markdown Preview
-          </a>
-          <a href="#tools" className="nav-link">
+          </button>
+          <button 
+            onClick={() => handleToolClick('json')} 
+            className={`nav-link ${currentTool === 'json' ? 'active' : ''}`}
+          >
+            <span className="nav-icon">🔧</span>
+            JSON Visualizer
+          </button>
+          <button 
+            onClick={() => handleToolClick('tools')} 
+            className={`nav-link ${currentTool === 'tools' ? 'active' : ''}`}
+          >
             <span className="nav-icon">🛠️</span>
             Tools
-          </a>
-          <a href="#about" className="nav-link">
+          </button>
+          <button 
+            onClick={() => handleToolClick('about')} 
+            className={`nav-link ${currentTool === 'about' ? 'active' : ''}`}
+          >
             <span className="nav-icon">ℹ️</span>
             About
-          </a>
+          </button>
         </div>
         
         <div className="navbar-toggle" onClick={toggleMenu}>
