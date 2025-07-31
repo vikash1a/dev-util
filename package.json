@@ -2,7 +2,7 @@
   "name": "dev-util",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://vikashsinha.github.io/dev-util",
+  "homepage": "https://vikash1a.github.io/dev-util",
   "dependencies": {
     "@testing-library/dom": "^10.4.1",
     "@testing-library/jest-dom": "^6.6.4",
