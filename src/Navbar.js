@@ -36,6 +36,13 @@ const Navbar = ({ currentTool, onToolChange }) => {
             JSON Visualizer
           </button>
           <button 
+            onClick={() => handleToolClick('jwt')} 
+            className={`nav-link ${currentTool === 'jwt' ? 'active' : ''}`}
+          >
+            <span className="nav-icon">🔐</span>
+            JWT Decoder
+          </button>
+          <button 
             onClick={() => handleToolClick('tools')} 
             className={`nav-link ${currentTool === 'tools' ? 'active' : ''}`}
           >
