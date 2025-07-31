@@ -42,20 +42,6 @@ const Navbar = ({ currentTool, onToolChange }) => {
             <span className="nav-icon">🔐</span>
             JWT Decoder
           </button>
-          <button 
-            onClick={() => handleToolClick('tools')} 
-            className={`nav-link ${currentTool === 'tools' ? 'active' : ''}`}
-          >
-            <span className="nav-icon">🛠️</span>
-            Tools
-          </button>
-          <button 
-            onClick={() => handleToolClick('about')} 
-            className={`nav-link ${currentTool === 'about' ? 'active' : ''}`}
-          >
-            <span className="nav-icon">ℹ️</span>
-            About
-          </button>
         </div>
         
         <div className="navbar-toggle" onClick={toggleMenu}>
