@@ -39,11 +39,6 @@ function hello() {
 
   return (
     <div className="markdown-preview-container">
-      <div className="markdown-header">
-        <h1>Markdown Preview</h1>
-        <p>Edit markdown on the left, see the preview on the right</p>
-      </div>
-      
       <div className="markdown-content">
         <div className="editor-section">
           <h3>Editor</h3>
