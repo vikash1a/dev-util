@@ -12,7 +12,6 @@ const MarkdownEditor = () => {
   const [fileHandle, setFileHandle] = useState(null);
   const [fileName, setFileName] = useState('Untitled.md');
   const [saveStatus, setSaveStatus] = useState('no-file'); // 'no-file' | 'saved' | 'saving' | 'unsaved' | 'error'
-  const [lastSavedTime, setLastSavedTime] = useState('');
   const [apiSupported, setApiSupported] = useState(true);
 
   const fileInputRef = useRef(null);
@@ -127,7 +126,6 @@ const MarkdownEditor = () => {
         await writable.close();
         
         setSaveStatus('saved');
-        setLastSavedTime(new Date().toLocaleTimeString());
       } catch (err) {
         console.error('Auto-save error:', err);
         setSaveStatus('error');
@@ -189,7 +187,6 @@ const MarkdownEditor = () => {
       setTimeout(() => {
         isLoadingFileRef.current = false;
         setSaveStatus('saved');
-        setLastSavedTime(new Date().toLocaleTimeString());
       }, 100);
 
     } catch (err) {
@@ -227,7 +224,6 @@ const MarkdownEditor = () => {
       setTimeout(() => {
         isLoadingFileRef.current = false;
         setSaveStatus('unsaved'); // Fallback can't auto-save directly
-        setLastSavedTime('');
       }, 100);
     };
     reader.readAsText(file);
@@ -272,7 +268,6 @@ const MarkdownEditor = () => {
       await writable.close();
       
       setSaveStatus('saved');
-      setLastSavedTime(new Date().toLocaleTimeString());
     } catch (err) {
       if (err.name !== 'AbortError') {
         console.error('Error saving file:', err);
@@ -296,7 +291,6 @@ const MarkdownEditor = () => {
       URL.revokeObjectURL(url);
       
       setSaveStatus('saved');
-      setLastSavedTime(new Date().toLocaleTimeString());
     } catch (err) {
       console.error('Download fallback failed:', err);
       alert('Failed to export markdown.');
@@ -323,7 +317,6 @@ const MarkdownEditor = () => {
       setTimeout(() => {
         isLoadingFileRef.current = false;
         setSaveStatus(apiSupported ? 'no-file' : 'unsaved');
-        setLastSavedTime('');
       }, 100);
     }
   };
@@ -387,11 +380,6 @@ const MarkdownEditor = () => {
           <span className="file-icon">📄</span>
           <span className="file-name-text">{fileName}</span>
           {renderStatusPill()}
-          {lastSavedTime && (
-            <span className="last-saved-time">
-              (Saved {lastSavedTime})
-            </span>
-          )}
         </div>
 
         <div className="editor-actions">
