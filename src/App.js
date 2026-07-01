@@ -9,6 +9,7 @@ import { GOOGLE_CLIENT_ID } from './config';
 
 function AppContent() {
   const [currentTool, setCurrentTool] = useState('markdown');
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const { user, loading } = useAuth();
 
   if (loading) {
@@ -25,8 +26,22 @@ function AppContent() {
   }
 
   return (
-    <div className="App">
-      <Navbar currentTool={currentTool} onToolChange={setCurrentTool} />
+    <div className={`App ${isSidebarCollapsed ? 'sidebar-collapsed' : ''}`}>
+      {isSidebarCollapsed && (
+        <button 
+          onClick={() => setIsSidebarCollapsed(false)} 
+          className="sidebar-floating-expand-btn"
+          title="Expand Sidebar"
+        >
+          📂
+        </button>
+      )}
+      <Navbar 
+        currentTool={currentTool} 
+        onToolChange={setCurrentTool} 
+        isCollapsed={isSidebarCollapsed}
+        onToggleCollapse={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
+      />
       <MainContent currentTool={currentTool} />
     </div>
   );

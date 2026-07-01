@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useAuth } from './AuthContext';
 import './Navbar.css';
 
-const Navbar = ({ currentTool, onToolChange }) => {
+const Navbar = ({ currentTool, onToolChange, isCollapsed, onToggleCollapse }) => {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const { user, logout } = useAuth();
 
@@ -20,11 +20,16 @@ const Navbar = ({ currentTool, onToolChange }) => {
   };
 
   return (
-    <nav className="navbar">
+    <nav className={`navbar ${isCollapsed ? 'collapsed' : ''}`}>
       <div className="navbar-container">
-        <div className="navbar-brand" title="Dev Utils">
-          <span className="brand-logo">🛠️</span>
-          <span className="brand-text">Dev Utils</span>
+        <div className="navbar-brand-header">
+          <div className="navbar-brand" title="Dev Utils">
+            <span className="brand-logo">🛠️</span>
+            <span className="brand-text">Dev Utils</span>
+          </div>
+          <button onClick={onToggleCollapse} className="sidebar-toggle-btn" title={isCollapsed ? "Expand Sidebar" : "Collapse Sidebar"}>
+            {isCollapsed ? '▶' : '◀'}
+          </button>
         </div>
         
         <div className="navbar-menu">

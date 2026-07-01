@@ -18,12 +18,19 @@
   box-sizing: border-box;
 }
 
+.navbar-brand-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 32px;
+  width: 100%;
+}
+
 .navbar-brand {
   display: flex;
   align-items: center;
   gap: 10px;
-  margin-bottom: 32px;
-  padding: 0 8px;
+  padding: 0 4px;
 }
 
 .brand-logo {
@@ -38,6 +45,25 @@
   letter-spacing: -0.02em;
   white-space: nowrap;
   transition: opacity 0.2s ease;
+}
+
+.sidebar-toggle-btn {
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.7);
+  cursor: pointer;
+  font-size: 0.85rem;
+  padding: 6px 8px;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sidebar-toggle-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
 }
 
 .navbar-menu {
@@ -204,7 +230,20 @@
   background: #f8fafc;
 }
 
-/* Responsive Sidebar collapsing to 70px icon-only bar on mobile/tablet */
+/* Collapsed Sidebar overrides (when manually collapsed - hides completely) */
+.navbar.collapsed {
+  width: 0;
+  box-shadow: none;
+  overflow: hidden;
+}
+
+.navbar.collapsed .navbar-container {
+  padding: 0;
+  width: 0;
+  overflow: hidden;
+}
+
+/* Responsive Sidebar collapsing on smaller viewports automatically */
 @media (max-width: 768px) {
   .navbar {
     width: 72px;
@@ -214,10 +253,15 @@
     padding: 20px 8px;
   }
 
-  .navbar-brand {
-    justify-content: center;
-    padding: 0;
+  .navbar-brand-header {
+    flex-direction: column;
+    gap: 12px;
     margin-bottom: 24px;
+    align-items: center;
+  }
+  
+  .sidebar-toggle-btn {
+    display: none; /* Hide toggle button on mobile since it collapses automatically */
   }
 
   .brand-text, 
@@ -233,7 +277,7 @@
   }
   
   .nav-link:hover {
-    transform: none; /* Disable horizontal slide on icon-only mode */
+    transform: none;
   }
 
   .profile-container {
@@ -243,6 +287,5 @@
 
   .profile-dropdown {
     left: 8px;
-    bottom: 100%;
   }
 }
