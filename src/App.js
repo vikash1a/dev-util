@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { GoogleOAuthProvider } from '@react-oauth/google';
-import { AuthProvider, useAuth } from './AuthContext';
+import { AuthProvider, useAuth } from './context/AuthContext';
 import './App.css';
-import Navbar from './Navbar';
-import MainContent from './MainContent';
-import Login from './Login';
+import Navbar from './components/Navbar';
+import MainContent from './components/MainContent';
+import Login from './components/Login';
 import { GOOGLE_CLIENT_ID } from './config';
 
 function AppContent() {
