@@ -384,20 +384,14 @@ const MarkdownEditor = () => {
 
       <header className="editor-header">
         <div className="file-info-section">
-          <div className="file-title-wrapper">
-            <h2>
-              <span className="file-icon">📄</span>
-              {fileName}
-            </h2>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
-              {renderStatusPill()}
-              {lastSavedTime && (
-                <span className="last-saved-time">
-                  Last saved: {lastSavedTime}
-                </span>
-              )}
-            </div>
-          </div>
+          <span className="file-icon">📄</span>
+          <span className="file-name-text">{fileName}</span>
+          {renderStatusPill()}
+          {lastSavedTime && (
+            <span className="last-saved-time">
+              (Saved {lastSavedTime})
+            </span>
+          )}
         </div>
 
         <div className="editor-actions">
@@ -407,13 +401,11 @@ const MarkdownEditor = () => {
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 19a2 2 0 01-2-2V7a2 2 0 012-2h4l2 2h4a2 2 0 012 2v1M5 19h14a2 2 0 002-2v-5M5 19V9a2 2 0 012-2h4M3 10h18" />
                 </svg>
-                <span className="btn-text">Open File</span>
               </button>
               <button onClick={handleSaveAs} className="editor-btn btn-save-as" title="Save As...">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" />
                 </svg>
-                <span className="btn-text">Save As...</span>
               </button>
             </>
           ) : (
@@ -422,13 +414,11 @@ const MarkdownEditor = () => {
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 19a2 2 0 01-2-2V7a2 2 0 012-2h4l2 2h4a2 2 0 012 2v1M5 19h14a2 2 0 002-2v-5M5 19V9a2 2 0 012-2h4M3 10h18" />
                 </svg>
-                <span className="btn-text">Import File</span>
               </button>
               <button onClick={handleDownloadFallback} className="editor-btn btn-save-as" title="Export MD">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
                 </svg>
-                <span className="btn-text">Export MD</span>
               </button>
             </>
           )}
@@ -437,24 +427,13 @@ const MarkdownEditor = () => {
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
             </svg>
-            <span className="btn-text">New / Clear</span>
           </button>
         </div>
       </header>
 
       {!apiSupported && (
-        <div className="fallback-warning">
-          <strong>Notice:</strong> Your browser does not support the File System Access API. 
-          You can import files and edit them, but auto-save back to the file is not supported. 
-          Use the <strong>Export MD</strong> button to download your work. For a fully automated experience, use a Chromium-based browser (Chrome, Edge, Opera, etc.).
-        </div>
-      )}
-
-      {fileHandle && (
-        <div className="editor-instructions">
-          <p>
-            👉 <strong>Autosave is active.</strong> Any changes you make will be saved back to <strong>{fileName}</strong> automatically 1 second after you finish editing.
-          </p>
+        <div className="fallback-warning" style={{ padding: '6px 12px', marginBottom: '8px', fontSize: '0.8rem' }}>
+          <strong>Notice:</strong> Local file auto-save is not supported. Use the <strong>Export MD</strong> button to download.
         </div>
       )}
 
