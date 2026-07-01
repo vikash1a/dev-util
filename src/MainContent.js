@@ -1,5 +1,5 @@
 import React from 'react';
-import MarkdownPreview from './MarkdownPreview';
+import MarkdownEditor from './MarkdownEditor';
 import JsonVisualizer from './JsonVisualizer';
 import JwtDecoder from './JwtDecoder';
 
@@ -7,13 +7,13 @@ const MainContent = ({ currentTool }) => {
   const renderContent = () => {
     switch (currentTool) {
       case 'markdown':
-        return <MarkdownPreview />;
+        return <MarkdownEditor />;
       case 'json':
         return <JsonVisualizer />;
       case 'jwt':
         return <JwtDecoder />;
       default:
-        return <MarkdownPreview />;
+        return <MarkdownEditor />;
     }
   };
 

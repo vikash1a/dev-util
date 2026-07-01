@@ -38,7 +38,7 @@ const Navbar = ({ currentTool, onToolChange }) => {
             className={`nav-link ${currentTool === 'markdown' ? 'active' : ''}`}
           >
             <span className="nav-icon">📝</span>
-            Markdown Preview
+            Markdown Editor
           </button>
           <button 
             onClick={() => handleToolClick('json')} 
