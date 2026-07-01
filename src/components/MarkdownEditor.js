@@ -8,10 +8,66 @@ import '@blocknote/mantine/style.css';
 import '@mantine/core/styles.css';
 import './MarkdownEditor.css';
 
+// IndexedDB Helper Functions to persist FileSystemFileHandle across page reloads
+const DB_NAME = 'DevUtilsDB';
+const STORE_NAME = 'FileHandles';
+
+const saveHandleToIndexedDB = async (handle) => {
+  return new Promise((resolve, reject) => {
+    const request = indexedDB.open(DB_NAME, 1);
+    request.onupgradeneeded = (e) => {
+      const db = e.target.result;
+      db.createObjectStore(STORE_NAME);
+    };
+    request.onsuccess = (e) => {
+      const db = e.target.result;
+      const tx = db.transaction(STORE_NAME, 'readwrite');
+      const store = tx.objectStore(STORE_NAME);
+      store.put(handle, 'activeFileHandle');
+      tx.oncomplete = () => resolve();
+      tx.onerror = (err) => reject(err);
+    };
+    request.onerror = (e) => reject(e);
+  });
+};
+
+const getHandleFromIndexedDB = async () => {
+  return new Promise((resolve, reject) => {
+    const request = indexedDB.open(DB_NAME, 1);
+    request.onupgradeneeded = (e) => {
+      const db = e.target.result;
+      db.createObjectStore(STORE_NAME);
+    };
+    request.onsuccess = (e) => {
+      const db = e.target.result;
+      const tx = db.transaction(STORE_NAME, 'readonly');
+      const store = tx.objectStore(STORE_NAME);
+      const getReq = store.get('activeFileHandle');
+      getReq.onsuccess = () => resolve(getReq.result);
+      getReq.onerror = (err) => reject(err);
+    };
+    request.onerror = (e) => reject(e);
+  });
+};
+
+const clearHandleFromIndexedDB = async () => {
+  return new Promise((resolve, reject) => {
+    const request = indexedDB.open(DB_NAME, 1);
+    request.onsuccess = (e) => {
+      const db = e.target.result;
+      const tx = db.transaction(STORE_NAME, 'readwrite');
+      const store = tx.objectStore(STORE_NAME);
+      store.delete('activeFileHandle');
+      tx.oncomplete = () => resolve();
+    };
+    request.onerror = (e) => reject(e);
+  });
+};
+
 const MarkdownEditor = () => {
   const [fileHandle, setFileHandle] = useState(null);
   const [fileName, setFileName] = useState('Untitled.md');
-  const [saveStatus, setSaveStatus] = useState('no-file'); // 'no-file' | 'saved' | 'saving' | 'unsaved' | 'error'
+  const [saveStatus, setSaveStatus] = useState('no-file'); // 'no-file' | 'saved' | 'saving' | 'unsaved' | 'error' | 'needs-authorization'
   const [apiSupported, setApiSupported] = useState(true);
 
   const fileInputRef = useRef(null);
@@ -66,6 +122,42 @@ const MarkdownEditor = () => {
       'showSaveFilePicker' in window;
     setApiSupported(supported);
   }, []);
+
+  // On page load, restore previous file handle from IndexedDB if available
+  useEffect(() => {
+    const restoreFile = async () => {
+      try {
+        const restoredHandle = await getHandleFromIndexedDB();
+        if (restoredHandle) {
+          setFileName(restoredHandle.name);
+          const permission = await restoredHandle.queryPermission({ mode: 'readwrite' });
+          if (permission === 'granted') {
+            setFileHandle(restoredHandle);
+            
+            const file = await restoredHandle.getFile();
+            const text = await file.text();
+            
+            isLoadingFileRef.current = true;
+            const blocks = editor.tryParseMarkdownToBlocks(text);
+            editor.replaceBlocks(editor.document, blocks.length > 0 ? blocks : [{ type: 'paragraph' }]);
+            
+            setTimeout(() => {
+              isLoadingFileRef.current = false;
+              setSaveStatus('saved');
+            }, 100);
+          } else {
+            setSaveStatus('needs-authorization');
+          }
+        }
+      } catch (err) {
+        console.error('Failed to restore file handle from DB:', err);
+      }
+    };
+
+    if (apiSupported) {
+      restoreFile();
+    }
+  }, [apiSupported, editor]);
 
   // Cleanup timeout on unmount
   useEffect(() => {
@@ -170,6 +262,7 @@ const MarkdownEditor = () => {
 
       setFileHandle(handle);
       setFileName(handle.name);
+      await saveHandleToIndexedDB(handle);
       
       const file = await handle.getFile();
       const text = await file.text();
@@ -194,6 +287,34 @@ const MarkdownEditor = () => {
         console.error('Error opening file:', err);
         alert('Failed to open file: ' + err.message);
       }
+    }
+  };
+
+  // Request permission for previously loaded file
+  const handleRequestPermission = async () => {
+    const handle = await getHandleFromIndexedDB();
+    if (!handle) return;
+
+    try {
+      const hasPermission = await verifyPermission(handle, true);
+      if (hasPermission) {
+        setFileHandle(handle);
+        setFileName(handle.name);
+
+        const file = await handle.getFile();
+        const text = await file.text();
+
+        isLoadingFileRef.current = true;
+        const blocks = editor.tryParseMarkdownToBlocks(text);
+        editor.replaceBlocks(editor.document, blocks.length > 0 ? blocks : [{ type: 'paragraph' }]);
+
+        setTimeout(() => {
+          isLoadingFileRef.current = false;
+          setSaveStatus('saved');
+        }, 100);
+      }
+    } catch (err) {
+      console.error('Error requesting file permission:', err);
     }
   };
 
@@ -259,6 +380,7 @@ const MarkdownEditor = () => {
 
       setFileHandle(handle);
       setFileName(handle.name);
+      await saveHandleToIndexedDB(handle);
       
       // Write content immediately
       setSaveStatus('saving');
@@ -298,13 +420,14 @@ const MarkdownEditor = () => {
   };
 
   // Reset editor / Create New File
-  const handleNewFile = () => {
+  const handleNewFile = async () => {
     if (window.confirm('Are you sure you want to clear the editor? Any unsaved changes will be lost.')) {
       if (saveTimeoutRef.current) {
         clearTimeout(saveTimeoutRef.current);
       }
       setFileHandle(null);
       setFileName('Untitled.md');
+      await clearHandleFromIndexedDB();
       
       isLoadingFileRef.current = true;
       editor.replaceBlocks(editor.document, [
@@ -335,7 +458,7 @@ const MarkdownEditor = () => {
         return (
           <span className="file-status-pill status-saved">
             <span className="status-dot"></span>
-            Saved to Local Disk
+            Saved
           </span>
         );
       case 'saving':
@@ -357,6 +480,13 @@ const MarkdownEditor = () => {
           <span className="file-status-pill status-error">
             <span className="status-dot"></span>
             Save Error
+          </span>
+        );
+      case 'needs-authorization':
+        return (
+          <span className="file-status-pill status-unsaved" style={{ cursor: 'pointer' }} onClick={handleRequestPermission}>
+            <span className="status-dot"></span>
+            Authorize Access
           </span>
         );
       default:
@@ -383,6 +513,14 @@ const MarkdownEditor = () => {
         </div>
 
         <div className="editor-actions">
+          {saveStatus === 'needs-authorization' && (
+            <button onClick={handleRequestPermission} className="editor-btn btn-open" title="Authorize File Access">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+              </svg>
+            </button>
+          )}
+
           {apiSupported ? (
             <>
               <button onClick={handleOpenFile} className="editor-btn btn-open" title="Open File">
