@@ -114,11 +114,11 @@
 .editor-btn {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  padding: 10px 18px;
-  border-radius: 8px;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: 6px;
   font-weight: 600;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   cursor: pointer;
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   border: none;
@@ -126,8 +126,8 @@
 }
 
 .editor-btn svg {
-  width: 16px;
-  height: 16px;
+  width: 14px;
+  height: 14px;
 }
 
 .btn-open {
@@ -218,18 +218,28 @@
   to { transform: rotate(360deg); }
 }
 
-@media (max-width: 640px) {
-  .editor-header {
-    flex-direction: column;
-    align-items: stretch;
-  }
-  
-  .editor-actions {
-    justify-content: stretch;
+@media (max-width: 900px) {
+  .editor-btn .btn-text {
+    display: none;
   }
   
   .editor-btn {
-    flex: 1;
+    padding: 8px;
+    width: 36px;
+    height: 36px;
     justify-content: center;
+    border-radius: 50%;
+  }
+  
+  .editor-actions {
+    gap: 8px;
+  }
+}
+
+@media (max-width: 640px) {
+  .editor-header {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
   }
 }

@@ -3,13 +3,8 @@ import { useAuth } from './AuthContext';
 import './Navbar.css';
 
 const Navbar = ({ currentTool, onToolChange }) => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const { user, logout } = useAuth();
-
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
-  };
 
   const toggleProfile = () => {
     setIsProfileOpen(!isProfileOpen);
@@ -17,7 +12,6 @@ const Navbar = ({ currentTool, onToolChange }) => {
 
   const handleToolClick = (tool) => {
     onToolChange(tool);
-    setIsMenuOpen(false);
   };
 
   const handleLogout = () => {
@@ -28,44 +22,48 @@ const Navbar = ({ currentTool, onToolChange }) => {
   return (
     <nav className="navbar">
       <div className="navbar-container">
-        <div className="navbar-brand">
-          <h1>Dev Utils</h1>
+        <div className="navbar-brand" title="Dev Utils">
+          <span className="brand-logo">🛠️</span>
+          <span className="brand-text">Dev Utils</span>
         </div>
         
-        <div className={`navbar-menu ${isMenuOpen ? 'active' : ''}`}>
+        <div className="navbar-menu">
           <button 
             onClick={() => handleToolClick('markdown')} 
             className={`nav-link ${currentTool === 'markdown' ? 'active' : ''}`}
+            title="Markdown Editor"
           >
             <span className="nav-icon">📝</span>
-            Markdown Editor
+            <span className="nav-text">Markdown Editor</span>
           </button>
           <button 
             onClick={() => handleToolClick('json')} 
             className={`nav-link ${currentTool === 'json' ? 'active' : ''}`}
+            title="JSON Visualizer"
           >
             <span className="nav-icon">🔧</span>
-            JSON Visualizer
+            <span className="nav-text">JSON Visualizer</span>
           </button>
           <button 
             onClick={() => handleToolClick('jwt')} 
             className={`nav-link ${currentTool === 'jwt' ? 'active' : ''}`}
+            title="JWT Decoder"
           >
             <span className="nav-icon">🔐</span>
-            JWT Decoder
+            <span className="nav-text">JWT Decoder</span>
           </button>
         </div>
         
         {user && (
           <div className="navbar-profile">
-            <div className="profile-container" onClick={toggleProfile}>
+            <div className="profile-container" onClick={toggleProfile} title={user.name}>
               <img 
                 src={user.picture} 
                 alt={user.name} 
                 className="profile-picture"
               />
               <span className="profile-name">{user.name}</span>
-              <span className="profile-arrow">▼</span>
+              <span className="profile-arrow">▲</span>
             </div>
             
             {isProfileOpen && (
@@ -85,12 +83,6 @@ const Navbar = ({ currentTool, onToolChange }) => {
             )}
           </div>
         )}
-        
-        <div className="navbar-toggle" onClick={toggleMenu}>
-          <span className={`hamburger ${isMenuOpen ? 'active' : ''}`}></span>
-          <span className={`hamburger ${isMenuOpen ? 'active' : ''}`}></span>
-          <span className={`hamburger ${isMenuOpen ? 'active' : ''}`}></span>
-        </div>
       </div>
     </nav>
   );

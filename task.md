@@ -1,9 +1,7 @@
-I want a new page which markdown editor
+* Make the menu bar smaller
 
-* It is based on blocknote library
+* Move it to the left section
 
-* It lets open a md file from a local machine
+* It should be samller
 
-* It auto saves the file to local on change
-
-* Old markdown can be removed
+* For markeditor, icones like open file should be evene smaeelr and just an icon if fit

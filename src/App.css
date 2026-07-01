@@ -1,4 +1,6 @@
 .App {
+  display: flex;
+  flex-direction: row;
   min-height: 100vh;
   background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
   padding: 0;
@@ -6,8 +8,10 @@
 }
 
 .main-content {
-  padding-top: 20px;
-  min-height: calc(100vh - 70px);
+  flex: 1;
+  min-height: 100vh;
+  box-sizing: border-box;
+  overflow-x: hidden;
 }
 
 .loading-container {
